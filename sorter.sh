@@ -1,29 +1,38 @@
 #!/bin/bash
 cd /home/$(whoami)/Downloads #Address directory
 IFS=$'\n'
-mkdir "|Pitcures" || echo "Debug: Pitcures folder exits"
-mkdir "|Documents" || echo "Debug: Documents folder exits"
-mkdir "|Videos" || echo "Debug: Videos folder exits"
-mkdir "|Archives" || echo "Debug: Archives folder exits"
-mkdir "|Others" || echo "Debug: Videos folder exits"
-mkdir "|Folder" || echo "Debug: Folder folder exits"
-documents=("pdf" "ocx" "txt" "otf" "html" "ptx" "otx" "lsx" "xls")
-pictures=("jpg" "png" "ebp" "svg")
+
+mkdir -p "|Pitcures"
+mkdir -p "|Documents"
+mkdir -p "|Videos"
+mkdir -p "|Archives"
+mkdir -p "|Music" 
+mkdir -p "|Others" 
+mkdir -p "|Folder" 
+documents=("pdf" "ocx" "txt" "otf" "html" "ptx" "otx" "lsx" "xls" "ltx" "csv")
+pictures=("jpg" "png" "ebp" "svg" "peg")
 videos=("mp4" "mkv" "avi")
+music=("mp3" "wav")
 archives=("zip" "rar" ".7z" "iso" "img" ".gz")
+
 for f in $(ls -F1) 
 do
+    if [[ ${f:0:1} == "|" ]]; then
+        continue
+    fi
     if [[ " ${documents[*]} " =~ [[:space:]]${f:(-3)}[[:space:]] ]]; then
-        echo document
+        mv $f "|Documents"
     elif [[ " ${pictures[*]} " =~ [[:space:]]${f:(-3)}[[:space:]] ]]; then
-        echo picture
+        mv $f "|Pitcures"
     elif [[ " ${videos[*]} " =~ [[:space:]]${f:(-3)}[[:space:]] ]]; then
-        echo video
+        mv $f "|Videos"
     elif [[ " ${archives[*]} " =~ [[:space:]]${f:(-3)}[[:space:]] ]]; then
-        echo archive
+        mv $f "|Archives"
+    elif [[ " ${music[*]} " =~ [[:space:]]${f:(-3)}[[:space:]] ]]; then
+        mv $f "|Music"
     elif [[ ${f:(-1)} == "/" ]]; then
-        echo folder
+        mv $f "|Folder"
     else
-        echo no
+        mv $f "|Others"
     fi
 done
